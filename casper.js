@@ -1278,6 +1278,7 @@
                 exporter.addFailure("unknown", message, 'test failed', "assert");
             }
             casper.echo([this.colorize(status, style), this.formatMessage(message)].join(' '));
+            return status;
         };
 
         /**
@@ -1292,12 +1293,14 @@
                 casper.echo(this.colorize(PASS, 'INFO') + ' ' + this.formatMessage(message));
                 this.testResults.passed++;
                 exporter.addSuccess("unknown", message);
+                return PASS;
             } else {
                 casper.echo(this.colorize(FAIL, 'RED_BAR') + ' ' + this.formatMessage(message, 'WARNING'));
                 this.comment('   got:      ' + testValue);
                 this.comment('   expected: ' + expected);
                 this.testResults.failed++;
                 exporter.addFailure("unknown", message, "test failed; expected: " + expected + "; got: " + testValue, "assertEquals");
+                return FAIL;
             }
         };
 
@@ -1346,12 +1349,14 @@
                 casper.echo(this.colorize(PASS, 'INFO') + ' ' + this.formatMessage(message));
                 this.testResults.passed++;
                 exporter.addSuccess("unknown", message);
+                return PASS;
             } else {
                 casper.echo(this.colorize(FAIL, 'RED_BAR') + ' ' + this.formatMessage(message, 'WARNING'));
                 this.comment('   subject: ' + subject);
                 this.comment('   pattern: ' + pattern.toString());
                 this.testResults.failed++;
                 exporter.addFailure("unknown", message, "test failed; subject: " + subject + "; pattern: " + pattern.toString(), "assertMatch");
+                return FAIL;
             }
         };
 
@@ -1447,7 +1452,7 @@
          * @param  String  message
          */
         this.fail = function(message) {
-            this.assert(false, message);
+            return this.assert(false, message);
         };
 
         /**
@@ -1479,7 +1484,7 @@
          * @param  String  message
          */
         this.pass = function(message) {
-            this.assert(true, message);
+            return this.assert(true, message);
         };
 
         /**
